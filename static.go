@@ -19,7 +19,11 @@ func targetFile(request *http.Request) string {
 
 func staticFileServer() http.Handler {
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
-		http.ServeFile(response, request, targetFile(request))
+		if request.Method == "GET" {
+			http.ServeFile(response, request, targetFile(request))
+		} else {
+			http.Error(response, "Invalid Request", http.StatusMethodNotAllowed)
+		}
 	})
 }
 
